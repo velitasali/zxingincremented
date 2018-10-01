@@ -51,7 +51,7 @@ ext {
 
     publishedGroupId = 'com.velitasali.tools.android'
     libraryName = 'ZXing Incremented'
-    artifact = ' zxing-incremented'
+    artifact = 'zxing-incremented'
 
     libraryDescription = 'A fork of https://bintray.com/journeyapps/maven/zxing-android-embedded which includes latest tools'
 
