@@ -6,5 +6,5 @@
 
 # To implement (JCenter)
 ```xml
-implementation 'com.genonbeta.coolsocket:main:3.6.1'
+implementation 'com.velitasali.tools.android:zxing:3.6.1'
 ```
