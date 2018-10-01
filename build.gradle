@@ -1,0 +1,33 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.0'
+        classpath "com.github.dcendents:android-maven-gradle-plugin:2.1"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+        mavenLocal()
+    }
+}
+
+ext {
+    compileSdkVersion = 28
+    buildToolsVersion = "28.0.3"
+    minSdkVersion = 14
+    targetSdkVersion = 28
+    versionName = "3.6.1"
+    versionCode = 1
+    supportVersion = "28.0.0"
+    zxingCoreVersion = "3.3.0" // Support Android 14+ if not 19+ = 3.3.2
+}
