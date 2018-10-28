@@ -37,7 +37,8 @@ import java.util.List;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public class ViewfinderView extends View {
+public class ViewfinderView extends View
+{
     protected static final String TAG = ViewfinderView.class.getSimpleName();
 
     protected static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
@@ -47,11 +48,11 @@ public class ViewfinderView extends View {
     protected static final int POINT_SIZE = 6;
 
     protected final Paint paint;
-    protected Bitmap resultBitmap;
     protected final int maskColor;
     protected final int resultColor;
     protected final int laserColor;
     protected final int resultPointColor;
+    protected Bitmap resultBitmap;
     protected int scannerAlpha;
     protected List<ResultPoint> possibleResultPoints;
     protected List<ResultPoint> lastPossibleResultPoints;
@@ -63,7 +64,8 @@ public class ViewfinderView extends View {
     protected Rect previewFramingRect;
 
     // This constructor is used when the class is built from an XML resource.
-    public ViewfinderView(Context context, AttributeSet attrs) {
+    public ViewfinderView(Context context, AttributeSet attrs)
+    {
         super(context, attrs);
 
         // Initialize these once for performance rather than calling them every time in onDraw().
@@ -90,51 +92,60 @@ public class ViewfinderView extends View {
         lastPossibleResultPoints = new ArrayList<>(MAX_RESULT_POINTS);
     }
 
-    public void setCameraPreview(CameraPreview view) {
+    public void setCameraPreview(CameraPreview view)
+    {
         this.cameraPreview = view;
-        view.addStateListener(new CameraPreview.StateListener() {
+        view.addStateListener(new CameraPreview.StateListener()
+        {
             @Override
-            public void previewSized() {
+            public void previewSized()
+            {
                 refreshSizes();
                 invalidate();
             }
 
             @Override
-            public void previewStarted() {
+            public void previewStarted()
+            {
 
             }
 
             @Override
-            public void previewStopped() {
+            public void previewStopped()
+            {
 
             }
 
             @Override
-            public void cameraError(Exception error) {
+            public void cameraError(Exception error)
+            {
 
             }
 
             @Override
-            public void cameraClosed() {
+            public void cameraClosed()
+            {
 
             }
         });
     }
 
-    protected void refreshSizes() {
-        if(cameraPreview == null) {
+    protected void refreshSizes()
+    {
+        if (cameraPreview == null) {
             return;
         }
         Rect framingRect = cameraPreview.getFramingRect();
         Rect previewFramingRect = cameraPreview.getPreviewFramingRect();
-        if(framingRect != null && previewFramingRect != null) {
+        if (framingRect != null && previewFramingRect != null) {
             this.framingRect = framingRect;
             this.previewFramingRect = previewFramingRect;
         }
     }
 
     @Override
-    public void onDraw(Canvas canvas) {
+    public void onDraw(Canvas canvas)
+    {
         refreshSizes();
         if (framingRect == null || previewFramingRect == null) {
             return;
@@ -216,7 +227,8 @@ public class ViewfinderView extends View {
         }
     }
 
-    public void drawViewfinder() {
+    public void drawViewfinder()
+    {
         Bitmap resultBitmap = this.resultBitmap;
         this.resultBitmap = null;
         if (resultBitmap != null) {
@@ -230,7 +242,8 @@ public class ViewfinderView extends View {
      *
      * @param result An image of the result.
      */
-    public void drawResultBitmap(Bitmap result) {
+    public void drawResultBitmap(Bitmap result)
+    {
         resultBitmap = result;
         invalidate();
     }
@@ -240,7 +253,8 @@ public class ViewfinderView extends View {
      *
      * @param point a point to draw, relative to the preview frame
      */
-    public void addPossibleResultPoint(ResultPoint point) {
+    public void addPossibleResultPoint(ResultPoint point)
+    {
         if (possibleResultPoints.size() < MAX_RESULT_POINTS)
             possibleResultPoints.add(point);
     }

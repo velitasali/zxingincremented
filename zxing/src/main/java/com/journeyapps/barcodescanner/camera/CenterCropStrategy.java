@@ -9,25 +9,27 @@ import com.journeyapps.barcodescanner.Size;
  * Scales the dimensions so that it fits entirely inside the parent.One of width or height will
  * fit exactly. Aspect ratio is preserved.
  */
-public class CenterCropStrategy extends PreviewScalingStrategy {
+public class CenterCropStrategy extends PreviewScalingStrategy
+{
     private static final String TAG = CenterCropStrategy.class.getSimpleName();
 
 
     /**
      * Get a score for our size.
-     *
+     * <p>
      * Based on heuristics for penalizing scaling and cropping.
-     *
+     * <p>
      * 1.0 is perfect (exact match).
      * 0.0 means we can't use it at all.
      *
-     * @param size the camera preview size (that can be scaled)
+     * @param size    the camera preview size (that can be scaled)
      * @param desired the viewfinder size
      * @return the score
      */
     @Override
-    protected float getScore(Size size, Size desired) {
-        if(size.width <= 0 || size.height <= 0) {
+    protected float getScore(Size size, Size desired)
+    {
+        if (size.width <= 0 || size.height <= 0) {
             return 0f;
         }
         Size scaled = size.scaleCrop(desired);
@@ -36,9 +38,9 @@ public class CenterCropStrategy extends PreviewScalingStrategy {
 
         // Treat downscaling as slightly better than upscaling
         float scaleScore;
-        if(scaleRatio > 1.0f) {
+        if (scaleRatio > 1.0f) {
             // Upscaling
-            scaleScore = (float)Math.pow(1.0f / scaleRatio, 1.1);
+            scaleScore = (float) Math.pow(1.0f / scaleRatio, 1.1);
         } else {
             // Downscaling
             scaleScore = scaleRatio;
@@ -58,14 +60,15 @@ public class CenterCropStrategy extends PreviewScalingStrategy {
 
     /**
      * Scale the preview to cover the viewfinder, then center it.
-     *
+     * <p>
      * Aspect ratio is preserved.
      *
-     * @param previewSize the size of the preview (camera), in current display orientation
+     * @param previewSize    the size of the preview (camera), in current display orientation
      * @param viewfinderSize the size of the viewfinder (display), in current display orientation
      * @return a rect placing the preview
      */
-    public Rect scalePreview(Size previewSize, Size viewfinderSize) {
+    public Rect scalePreview(Size previewSize, Size viewfinderSize)
+    {
         // We avoid scaling if feasible.
         Size scaledPreview = previewSize.scaleCrop(viewfinderSize);
         Log.i(TAG, "Preview: " + previewSize + "; Scaled: " + scaledPreview + "; Want: " + viewfinderSize);

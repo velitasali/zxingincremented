@@ -18,9 +18,10 @@ import java.util.List;
 /**
  *
  */
-public class DecoderThread {
+public class DecoderThread
+{
     private static final String TAG = DecoderThread.class.getSimpleName();
-
+    private final Object LOCK = new Object();
     private CameraInstance cameraInstance;
     private HandlerThread thread;
     private Handler handler;
@@ -28,78 +29,11 @@ public class DecoderThread {
     private Handler resultHandler;
     private Rect cropRect;
     private boolean running = false;
-    private final Object LOCK = new Object();
-
-    private final Handler.Callback callback = new Handler.Callback() {
+    private final PreviewCallback previewCallback = new PreviewCallback()
+    {
         @Override
-        public boolean handleMessage(Message message) {
-            if (message.what == R.id.zxing_decode) {
-                decode((SourceData) message.obj);
-            } else if(message.what == R.id.zxing_preview_failed) {
-                // Error already logged. Try again.
-                requestNextPreview();
-            }
-            return true;
-        }
-    };
-
-    public DecoderThread(CameraInstance cameraInstance, Decoder decoder, Handler resultHandler) {
-        Util.validateMainThread();
-
-        this.cameraInstance = cameraInstance;
-        this.decoder = decoder;
-        this.resultHandler = resultHandler;
-    }
-
-    public Decoder getDecoder() {
-        return decoder;
-    }
-
-    public void setDecoder(Decoder decoder) {
-        this.decoder = decoder;
-    }
-
-    public Rect getCropRect() {
-        return cropRect;
-    }
-
-    public void setCropRect(Rect cropRect) {
-        this.cropRect = cropRect;
-    }
-
-    /**
-     * Start decoding.
-     *
-     * This must be called from the UI thread.
-     */
-    public void start() {
-        Util.validateMainThread();
-
-        thread = new HandlerThread(TAG);
-        thread.start();
-        handler = new Handler(thread.getLooper(), callback);
-        running = true;
-        requestNextPreview();
-    }
-
-    /**
-     * Stop decoding.
-     *
-     * This must be called from the UI thread.
-     */
-    public void stop() {
-        Util.validateMainThread();
-
-        synchronized (LOCK) {
-            running = false;
-            handler.removeCallbacksAndMessages(null);
-            thread.quit();
-        }
-    }
-
-    private final PreviewCallback previewCallback = new PreviewCallback() {
-        @Override
-        public void onPreview(SourceData sourceData) {
+        public void onPreview(SourceData sourceData)
+        {
             // Only post if running, to prevent a warning like this:
             //   java.lang.RuntimeException: Handler (android.os.Handler) sending message to a Handler on a dead thread
 
@@ -113,7 +47,8 @@ public class DecoderThread {
         }
 
         @Override
-        public void onPreviewError(Exception e) {
+        public void onPreviewError(Exception e)
+        {
             synchronized (LOCK) {
                 if (running) {
                     // Post to our thread.
@@ -122,12 +57,89 @@ public class DecoderThread {
             }
         }
     };
+    private final Handler.Callback callback = new Handler.Callback()
+    {
+        @Override
+        public boolean handleMessage(Message message)
+        {
+            if (message.what == R.id.zxing_decode) {
+                decode((SourceData) message.obj);
+            } else if (message.what == R.id.zxing_preview_failed) {
+                // Error already logged. Try again.
+                requestNextPreview();
+            }
+            return true;
+        }
+    };
 
-    private void requestNextPreview() {
+    public DecoderThread(CameraInstance cameraInstance, Decoder decoder, Handler resultHandler)
+    {
+        Util.validateMainThread();
+
+        this.cameraInstance = cameraInstance;
+        this.decoder = decoder;
+        this.resultHandler = resultHandler;
+    }
+
+    public Decoder getDecoder()
+    {
+        return decoder;
+    }
+
+    public void setDecoder(Decoder decoder)
+    {
+        this.decoder = decoder;
+    }
+
+    public Rect getCropRect()
+    {
+        return cropRect;
+    }
+
+    public void setCropRect(Rect cropRect)
+    {
+        this.cropRect = cropRect;
+    }
+
+    /**
+     * Start decoding.
+     * <p>
+     * This must be called from the UI thread.
+     */
+    public void start()
+    {
+        Util.validateMainThread();
+
+        thread = new HandlerThread(TAG);
+        thread.start();
+        handler = new Handler(thread.getLooper(), callback);
+        running = true;
+        requestNextPreview();
+    }
+
+    /**
+     * Stop decoding.
+     * <p>
+     * This must be called from the UI thread.
+     */
+    public void stop()
+    {
+        Util.validateMainThread();
+
+        synchronized (LOCK) {
+            running = false;
+            handler.removeCallbacksAndMessages(null);
+            thread.quit();
+        }
+    }
+
+    private void requestNextPreview()
+    {
         cameraInstance.requestPreview(previewCallback);
     }
 
-    protected LuminanceSource createSource(SourceData sourceData) {
+    protected LuminanceSource createSource(SourceData sourceData)
+    {
         if (this.cropRect == null) {
             return null;
         } else {
@@ -135,13 +147,14 @@ public class DecoderThread {
         }
     }
 
-    private void decode(SourceData sourceData) {
+    private void decode(SourceData sourceData)
+    {
         long start = System.currentTimeMillis();
         Result rawResult = null;
         sourceData.setCropRect(cropRect);
         LuminanceSource source = createSource(sourceData);
 
-        if(source != null) {
+        if (source != null) {
             rawResult = decoder.decode(source);
         }
 

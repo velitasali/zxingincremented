@@ -5,40 +5,41 @@ import android.os.HandlerThread;
 
 /**
  * Singleton thread that is started and stopped on demand.
- *
+ * <p>
  * Any access to Camera / CameraManager should happen on this thread, through CameraInstance.
  */
-class CameraThread {
+class CameraThread
+{
     private static final String TAG = CameraThread.class.getSimpleName();
 
     private static CameraThread instance;
+    private final Object LOCK = new Object();
+    private Handler handler;
+    private HandlerThread thread;
 
-    public static CameraThread getInstance() {
+    private int openCount = 0;
+
+    private CameraThread()
+    {
+    }
+
+    public static CameraThread getInstance()
+    {
         if (instance == null) {
             instance = new CameraThread();
         }
         return instance;
     }
 
-    private Handler handler;
-    private HandlerThread thread;
-
-    private int openCount = 0;
-
-    private final Object LOCK = new Object();
-
-
-    private CameraThread() {
-    }
-
     /**
      * Call from main thread or camera thread.
-     *
+     * <p>
      * Enqueues a task on the camera thread.
      *
      * @param runnable the task to enqueue
      */
-    protected void enqueue(Runnable runnable) {
+    protected void enqueue(Runnable runnable)
+    {
         synchronized (LOCK) {
             checkRunning();
             this.handler.post(runnable);
@@ -47,20 +48,22 @@ class CameraThread {
 
     /**
      * Call from main thread or camera thread.
-     *
+     * <p>
      * Enqueues a task on the camera thread.
      *
-     * @param runnable the task to enqueue
+     * @param runnable    the task to enqueue
      * @param delayMillis the delay in milliseconds before executing the runnable
      */
-    protected void enqueueDelayed(Runnable runnable, long delayMillis) {
+    protected void enqueueDelayed(Runnable runnable, long delayMillis)
+    {
         synchronized (LOCK) {
             checkRunning();
             this.handler.postDelayed(runnable, delayMillis);
         }
     }
 
-    private void checkRunning() {
+    private void checkRunning()
+    {
         synchronized (LOCK) {
             if (this.handler == null) {
                 if (openCount <= 0) {
@@ -76,7 +79,8 @@ class CameraThread {
     /**
      * Call from camera thread.
      */
-    private void quit() {
+    private void quit()
+    {
         synchronized (LOCK) {
             this.thread.quit();
             this.thread = null;
@@ -87,7 +91,8 @@ class CameraThread {
     /**
      * Call from camera thread
      */
-    protected void decrementInstances() {
+    protected void decrementInstances()
+    {
         synchronized (LOCK) {
             openCount -= 1;
             if (openCount == 0) {
@@ -101,7 +106,8 @@ class CameraThread {
      *
      * @param runner The {@link Runnable} to be enqueued
      */
-    protected void incrementAndEnqueue(Runnable runner) {
+    protected void incrementAndEnqueue(Runnable runner)
+    {
         synchronized (LOCK) {
             openCount += 1;
             enqueue(runner);

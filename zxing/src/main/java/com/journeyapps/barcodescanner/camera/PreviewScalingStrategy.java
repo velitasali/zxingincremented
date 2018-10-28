@@ -12,22 +12,24 @@ import java.util.List;
 /**
  *
  */
-public abstract class PreviewScalingStrategy {
+public abstract class PreviewScalingStrategy
+{
     private static final String TAG = PreviewScalingStrategy.class.getSimpleName();
 
     /**
      * Choose the best preview size, based on our viewfinder size.
-     *
+     * <p>
      * The default implementation lets subclasses calculate a score for each size, the picks the one
      * with the best score.
-     *
+     * <p>
      * The sizes list may be reordered by this call.
      *
-     * @param sizes supported preview sizes, containing at least one size. Sizes are in natural camera orientation.
+     * @param sizes   supported preview sizes, containing at least one size. Sizes are in natural camera orientation.
      * @param desired The desired viewfinder size, in the same orientation
      * @return the best preview size, never null
      */
-    public Size getBestPreviewSize(List<Size> sizes, final Size desired) {
+    public Size getBestPreviewSize(List<Size> sizes, final Size desired)
+    {
         // Sample of supported preview sizes:
         // http://www.kirill.org/ar/ar.php
 
@@ -41,23 +43,26 @@ public abstract class PreviewScalingStrategy {
 
     /**
      * Sort previews based on their suitability.
-     *
+     * <p>
      * In most cases, {@link #getBestPreviewSize(List, Size)} should be used instead.
-     *
+     * <p>
      * The sizes list may be reordered by this call.
      *
-     * @param sizes supported preview sizes, containing at least one size. Sizes are in natural camera orientation.
+     * @param sizes   supported preview sizes, containing at least one size. Sizes are in natural camera orientation.
      * @param desired The desired viewfinder size, in the same orientation
      * @return an ordered list, best preview first
      */
-    public List<Size> getBestPreviewOrder(List<Size> sizes, final Size desired) {
+    public List<Size> getBestPreviewOrder(List<Size> sizes, final Size desired)
+    {
         if (desired == null) {
             return sizes;
         }
 
-        Collections.sort(sizes, new Comparator<Size>() {
+        Collections.sort(sizes, new Comparator<Size>()
+        {
             @Override
-            public int compare(Size a, Size b) {
+            public int compare(Size a, Size b)
+            {
                 float aScore = getScore(a, desired);
                 float bScore = getScore(b, desired);
                 // Bigger score first
@@ -71,24 +76,25 @@ public abstract class PreviewScalingStrategy {
 
     /**
      * Get a score for our size.
-     *
+     * <p>
      * 1.0 is perfect (exact match).
      * 0.0 means we can't use it at all.
-     *
+     * <p>
      * Subclasses should override this.
      *
-     * @param size the camera preview size (that can be scaled)
+     * @param size    the camera preview size (that can be scaled)
      * @param desired the viewfinder size
      * @return the score
      */
-    protected float getScore(Size size, Size desired) {
+    protected float getScore(Size size, Size desired)
+    {
         return 0.5f;
     }
 
     /**
      * Scale and position the preview relative to the viewfinder.
      *
-     * @param previewSize the size of the preview (camera), in current display orientation
+     * @param previewSize    the size of the preview (camera), in current display orientation
      * @param viewfinderSize the size of the viewfinder (display), in current display orientation
      * @return a rect placing the preview, relative to the viewfinder
      */

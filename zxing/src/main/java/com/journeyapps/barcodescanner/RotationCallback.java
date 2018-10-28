@@ -3,7 +3,8 @@ package com.journeyapps.barcodescanner;
 /**
  *
  */
-public interface RotationCallback {
+public interface RotationCallback
+{
     /**
      * Rotation changed.
      *

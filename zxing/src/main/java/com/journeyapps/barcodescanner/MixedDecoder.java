@@ -8,7 +8,8 @@ import com.google.zxing.common.HybridBinarizer;
 /**
  * Decoder that performs alternating scans in normal mode and inverted mode.
  */
-public class MixedDecoder extends Decoder {
+public class MixedDecoder extends Decoder
+{
     private boolean isInverted = true;
 
     /**
@@ -17,19 +18,21 @@ public class MixedDecoder extends Decoder {
      *
      * @param reader the reader
      */
-    public MixedDecoder(Reader reader) {
+    public MixedDecoder(Reader reader)
+    {
         super(reader);
     }
 
     /**
      * Given an image source, convert to a binary bitmap.
-     *
+     * <p>
      * Override this to use a custom binarizer.
      *
      * @param source the image source
      * @return a BinaryBitmap
      */
-    protected BinaryBitmap toBitmap(LuminanceSource source) {
+    protected BinaryBitmap toBitmap(LuminanceSource source)
+    {
         if (isInverted) {
             isInverted = false;
             return new BinaryBitmap(new HybridBinarizer(source.invert()));

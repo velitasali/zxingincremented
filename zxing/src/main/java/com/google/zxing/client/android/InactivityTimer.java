@@ -26,7 +26,8 @@ import android.os.Handler;
 /**
  * Finishes an context after a period of inactivity if the device is on battery power.
  */
-public final class InactivityTimer {
+public final class InactivityTimer
+{
 
     private static final String TAG = InactivityTimer.class.getSimpleName();
 
@@ -39,7 +40,8 @@ public final class InactivityTimer {
     private Runnable callback;
     private boolean onBattery;
 
-    public InactivityTimer(Context context, Runnable callback) {
+    public InactivityTimer(Context context, Runnable callback)
+    {
         this.context = context;
         this.callback = callback;
 
@@ -50,7 +52,8 @@ public final class InactivityTimer {
     /**
      * Trigger activity, resetting the timer.
      */
-    public void activity() {
+    public void activity()
+    {
         cancelCallback();
         if (onBattery) {
             handler.postDelayed(callback, INACTIVITY_DELAY_MS);
@@ -60,7 +63,8 @@ public final class InactivityTimer {
     /**
      * Start the activity timer.
      */
-    public void start() {
+    public void start()
+    {
         registerReceiver();
         activity();
     }
@@ -68,30 +72,35 @@ public final class InactivityTimer {
     /**
      * Cancel the activity timer.
      */
-    public void cancel() {
+    public void cancel()
+    {
         cancelCallback();
         unregisterReceiver();
     }
 
-    private void unregisterReceiver() {
+    private void unregisterReceiver()
+    {
         if (registered) {
             context.unregisterReceiver(powerStatusReceiver);
             registered = false;
         }
     }
 
-    private void registerReceiver() {
+    private void registerReceiver()
+    {
         if (!registered) {
             context.registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
             registered = true;
         }
     }
 
-    private void cancelCallback() {
+    private void cancelCallback()
+    {
         handler.removeCallbacksAndMessages(null);
     }
 
-    private void onBattery(boolean onBattery) {
+    private void onBattery(boolean onBattery)
+    {
         this.onBattery = onBattery;
 
         // To make sure we're still running
@@ -101,16 +110,20 @@ public final class InactivityTimer {
         }
     }
 
-    private final class PowerStatusReceiver extends BroadcastReceiver {
+    private final class PowerStatusReceiver extends BroadcastReceiver
+    {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(Context context, Intent intent)
+        {
             if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
                 // 0 indicates that we're on battery
                 final boolean onBatteryNow = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1) <= 0;
                 // post on handler to run in main thread
-                handler.post(new Runnable() {
+                handler.post(new Runnable()
+                {
                     @Override
-                    public void run() {
+                    public void run()
+                    {
                         onBattery(onBatteryNow);
                     }
                 });

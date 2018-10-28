@@ -32,7 +32,8 @@ import com.journeyapps.barcodescanner.camera.CameraSettings;
  * @author Sean Owen
  * @author Nikolaus Huber
  */
-public final class AmbientLightManager implements SensorEventListener {
+public final class AmbientLightManager implements SensorEventListener
+{
 
     private static final float TOO_DARK_LUX = 45.0f;
     private static final float BRIGHT_ENOUGH_LUX = 450.0f;
@@ -44,7 +45,8 @@ public final class AmbientLightManager implements SensorEventListener {
 
     private Handler handler;
 
-    public AmbientLightManager(Context context, CameraManager cameraManager, CameraSettings settings) {
+    public AmbientLightManager(Context context, CameraManager cameraManager, CameraSettings settings)
+    {
         this.context = context;
         this.cameraManager = cameraManager;
         this.cameraSettings = settings;
@@ -52,7 +54,8 @@ public final class AmbientLightManager implements SensorEventListener {
         this.handler = new Handler();
     }
 
-    public void start() {
+    public void start()
+    {
         if (cameraSettings.isAutoTorchEnabled()) {
             SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
             lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -62,7 +65,8 @@ public final class AmbientLightManager implements SensorEventListener {
         }
     }
 
-    public void stop() {
+    public void stop()
+    {
         if (lightSensor != null) {
             SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
             sensorManager.unregisterListener(this);
@@ -70,17 +74,21 @@ public final class AmbientLightManager implements SensorEventListener {
         }
     }
 
-    private void setTorch(final boolean on) {
-        handler.post(new Runnable() {
+    private void setTorch(final boolean on)
+    {
+        handler.post(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 cameraManager.setTorch(on);
             }
         });
     }
 
     @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
+    public void onSensorChanged(SensorEvent sensorEvent)
+    {
         float ambientLightLux = sensorEvent.values[0];
         if (cameraManager != null) {
             if (ambientLightLux <= TOO_DARK_LUX) {
@@ -92,7 +100,8 @@ public final class AmbientLightManager implements SensorEventListener {
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    public void onAccuracyChanged(Sensor sensor, int accuracy)
+    {
         // do nothing
     }
 }

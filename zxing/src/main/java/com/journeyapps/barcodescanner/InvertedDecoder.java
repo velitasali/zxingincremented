@@ -8,7 +8,8 @@ import com.google.zxing.common.HybridBinarizer;
 /**
  * Created by leighmd on 11/2/16.
  */
-public class InvertedDecoder extends Decoder {
+public class InvertedDecoder extends Decoder
+{
 
     /**
      * Create a new Decoder with the specified Reader.
@@ -16,19 +17,21 @@ public class InvertedDecoder extends Decoder {
      *
      * @param reader the reader
      */
-    public InvertedDecoder(Reader reader) {
+    public InvertedDecoder(Reader reader)
+    {
         super(reader);
     }
 
     /**
      * Given an image source, convert to a binary bitmap.
-     *
+     * <p>
      * Override this to use a custom binarizer.
      *
      * @param source the image source
      * @return a BinaryBitmap
      */
-    protected BinaryBitmap toBitmap(LuminanceSource source) {
+    protected BinaryBitmap toBitmap(LuminanceSource source)
+    {
 
         return new BinaryBitmap(new HybridBinarizer(source.invert()));
     }

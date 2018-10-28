@@ -14,35 +14,26 @@ import java.util.Map;
 
 /**
  * A view for scanning barcodes.
- *
+ * <p>
  * Two methods MUST be called to manage the state:
  * 1. resume() - initialize the camera and start the preview. Call from the Activity's onResume().
  * 2. pause() - stop the preview and release any resources. Call from the Activity's onPause().
- *
+ * <p>
  * Start decoding with decodeSingle() or decodeContinuous(). Stop decoding with stopDecoding().
  *
  * @see CameraPreview for more details on the preview lifecycle.
  */
-public class BarcodeView extends CameraPreview {
-
-    private enum DecodeMode {
-        NONE,
-        SINGLE,
-        CONTINUOUS
-    }
+public class BarcodeView extends CameraPreview
+{
 
     private DecodeMode decodeMode = DecodeMode.NONE;
     private BarcodeCallback callback = null;
     private DecoderThread decoderThread;
-
-    private DecoderFactory decoderFactory;
-
-
-    private Handler resultHandler;
-
-    private final Handler.Callback resultCallback = new Handler.Callback() {
+    private final Handler.Callback resultCallback = new Handler.Callback()
+    {
         @Override
-        public boolean handleMessage(Message message) {
+        public boolean handleMessage(Message message)
+        {
             if (message.what == R.id.zxing_decode_succeeded) {
                 BarcodeResult result = (BarcodeResult) message.obj;
 
@@ -69,46 +60,38 @@ public class BarcodeView extends CameraPreview {
             return false;
         }
     };
+    private DecoderFactory decoderFactory;
 
 
-    public BarcodeView(Context context) {
+    private Handler resultHandler;
+
+    public BarcodeView(Context context)
+    {
         super(context);
         initialize();
     }
 
-    public BarcodeView(Context context, AttributeSet attrs) {
+
+    public BarcodeView(Context context, AttributeSet attrs)
+    {
         super(context, attrs);
         initialize();
     }
 
-    public BarcodeView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BarcodeView(Context context, AttributeSet attrs, int defStyleAttr)
+    {
         super(context, attrs, defStyleAttr);
         initialize();
     }
 
-    private void initialize() {
+    private void initialize()
+    {
         decoderFactory = new DefaultDecoderFactory();
         resultHandler = new Handler(resultCallback);
     }
 
-    /**
-     * Set the DecoderFactory to use. Use this to specify the formats to decode.
-     *
-     * Call this from UI thread only.
-     *
-     * @param decoderFactory the DecoderFactory creating Decoders.
-     * @see DefaultDecoderFactory
-     */
-    public void setDecoderFactory(DecoderFactory decoderFactory) {
-        Util.validateMainThread();
-
-        this.decoderFactory = decoderFactory;
-        if (this.decoderThread != null) {
-            this.decoderThread.setDecoder(createDecoder());
-        }
-    }
-
-    private Decoder createDecoder() {
+    private Decoder createDecoder()
+    {
         if (decoderFactory == null) {
             decoderFactory = createDefaultDecoderFactory();
         }
@@ -121,21 +104,40 @@ public class BarcodeView extends CameraPreview {
     }
 
     /**
-     *
      * @return the current DecoderFactory in use.
      */
-    public DecoderFactory getDecoderFactory() {
+    public DecoderFactory getDecoderFactory()
+    {
         return decoderFactory;
     }
 
     /**
-     * Decode a single barcode, then stop decoding.
+     * Set the DecoderFactory to use. Use this to specify the formats to decode.
+     * <p>
+     * Call this from UI thread only.
      *
+     * @param decoderFactory the DecoderFactory creating Decoders.
+     * @see DefaultDecoderFactory
+     */
+    public void setDecoderFactory(DecoderFactory decoderFactory)
+    {
+        Util.validateMainThread();
+
+        this.decoderFactory = decoderFactory;
+        if (this.decoderThread != null) {
+            this.decoderThread.setDecoder(createDecoder());
+        }
+    }
+
+    /**
+     * Decode a single barcode, then stop decoding.
+     * <p>
      * The callback will only be called on the UI thread.
      *
      * @param callback called with the barcode result, as well as possible ResultPoints
      */
-    public void decodeSingle(BarcodeCallback callback) {
+    public void decodeSingle(BarcodeCallback callback)
+    {
         this.decodeMode = DecodeMode.SINGLE;
         this.callback = callback;
         startDecoderThread();
@@ -143,12 +145,13 @@ public class BarcodeView extends CameraPreview {
 
     /**
      * Continuously decode barcodes. The same barcode may be returned multiple times per second.
-     *
+     * <p>
      * The callback will only be called on the UI thread.
      *
      * @param callback called with the barcode result, as well as possible ResultPoints
      */
-    public void decodeContinuous(BarcodeCallback callback) {
+    public void decodeContinuous(BarcodeCallback callback)
+    {
         this.decodeMode = DecodeMode.CONTINUOUS;
         this.callback = callback;
         startDecoderThread();
@@ -157,17 +160,20 @@ public class BarcodeView extends CameraPreview {
     /**
      * Stop decoding, but do not stop the preview.
      */
-    public void stopDecoding() {
+    public void stopDecoding()
+    {
         this.decodeMode = DecodeMode.NONE;
         this.callback = null;
         stopDecoderThread();
     }
 
-    protected DecoderFactory createDefaultDecoderFactory() {
+    protected DecoderFactory createDefaultDecoderFactory()
+    {
         return new DefaultDecoderFactory();
     }
 
-    private void startDecoderThread() {
+    private void startDecoderThread()
+    {
         stopDecoderThread(); // To be safe
 
         if (decodeMode != DecodeMode.NONE && isPreviewActive()) {
@@ -181,27 +187,38 @@ public class BarcodeView extends CameraPreview {
     }
 
     @Override
-    protected void previewStarted() {
+    protected void previewStarted()
+    {
         super.previewStarted();
 
         startDecoderThread();
     }
 
-    private void stopDecoderThread() {
+    private void stopDecoderThread()
+    {
         if (decoderThread != null) {
             decoderThread.stop();
             decoderThread = null;
         }
     }
+
     /**
      * Stops the live preview and decoding.
-     *
+     * <p>
      * Call from the Activity's onPause() method.
      */
     @Override
-    public void pause() {
+    public void pause()
+    {
         stopDecoderThread();
 
         super.pause();
+    }
+
+    private enum DecodeMode
+    {
+        NONE,
+        SINGLE,
+        CONTINUOUS
     }
 }

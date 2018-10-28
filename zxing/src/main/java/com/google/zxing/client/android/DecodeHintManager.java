@@ -31,14 +31,16 @@ import java.util.regex.Pattern;
 /**
  * @author Lachezar Dobrev
  */
-public final class DecodeHintManager {
+public final class DecodeHintManager
+{
 
     private static final String TAG = DecodeHintManager.class.getSimpleName();
 
     // This pattern is used in decoding integer arrays.
     private static final Pattern COMMA = Pattern.compile(",");
 
-    private DecodeHintManager() {
+    private DecodeHintManager()
+    {
     }
 
     /**
@@ -55,7 +57,8 @@ public final class DecodeHintManager {
      * @param query query to split
      * @return name-value pairs
      */
-    private static Map<String, String> splitQuery(String query) {
+    private static Map<String, String> splitQuery(String query)
+    {
         Map<String, String> map = new HashMap<>();
         int pos = 0;
         while (pos < query.length()) {
@@ -115,7 +118,8 @@ public final class DecodeHintManager {
         return map;
     }
 
-    static Map<DecodeHintType, ?> parseDecodeHints(Uri inputUri) {
+    static Map<DecodeHintType, ?> parseDecodeHints(Uri inputUri)
+    {
         String query = inputUri.getEncodedQuery();
         if (query == null || query.isEmpty()) {
             return null;
@@ -199,7 +203,8 @@ public final class DecodeHintManager {
         return hints;
     }
 
-    public static Map<DecodeHintType, Object> parseDecodeHints(Intent intent) {
+    public static Map<DecodeHintType, Object> parseDecodeHints(Intent intent)
+    {
         Bundle extras = intent.getExtras();
         if (extras == null || extras.isEmpty()) {
             return null;

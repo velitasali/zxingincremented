@@ -14,25 +14,26 @@ import java.util.Map;
 
 /**
  * This contains the result of a barcode scan.
- *
+ * <p>
  * This class delegate all read-only fields of {@link com.google.zxing.Result},
  * and adds a bitmap with scanned barcode.
  */
-public class BarcodeResult {
+public class BarcodeResult
+{
     private static final float PREVIEW_LINE_WIDTH = 4.0f;
     private static final float PREVIEW_DOT_WIDTH = 10.0f;
-
+    private final int mScaleFactor = 2;
     protected Result mResult;
     protected SourceData sourceData;
 
-    private final int mScaleFactor = 2;
-
-    public BarcodeResult(Result result, SourceData sourceData) {
+    public BarcodeResult(Result result, SourceData sourceData)
+    {
         this.mResult = result;
         this.sourceData = sourceData;
     }
 
-    private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b, int scaleFactor) {
+    private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b, int scaleFactor)
+    {
         if (a != null && b != null) {
             canvas.drawLine(a.getX() / scaleFactor,
                     a.getY() / scaleFactor,
@@ -45,7 +46,8 @@ public class BarcodeResult {
     /**
      * @return wrapped {@link com.google.zxing.Result}
      */
-    public Result getResult() {
+    public Result getResult()
+    {
         return mResult;
     }
 
@@ -53,7 +55,8 @@ public class BarcodeResult {
      * @return {@link Bitmap} with barcode preview
      * @see #getBitmapWithResultPoints(int)
      */
-    public Bitmap getBitmap() {
+    public Bitmap getBitmap()
+    {
         return sourceData.getBitmap(mScaleFactor);
     }
 
@@ -61,7 +64,8 @@ public class BarcodeResult {
      * @param color Color of result points
      * @return {@link Bitmap} with result points on it, or plain bitmap, if no result points
      */
-    public Bitmap getBitmapWithResultPoints(int color) {
+    public Bitmap getBitmapWithResultPoints(int color)
+    {
         Bitmap bitmap = getBitmap();
         Bitmap barcode = bitmap;
         ResultPoint[] points = mResult.getResultPoints();
@@ -94,10 +98,10 @@ public class BarcodeResult {
     }
 
     /**
-     *
      * @return Bitmap preview scale factor
      */
-    public int getBitmapScaleFactor(){
+    public int getBitmapScaleFactor()
+    {
         return mScaleFactor;
     }
 
@@ -105,7 +109,8 @@ public class BarcodeResult {
      * @return raw text encoded by the barcode
      * @see Result#getText()
      */
-    public String getText() {
+    public String getText()
+    {
         return mResult.getText();
     }
 
@@ -113,7 +118,8 @@ public class BarcodeResult {
      * @return raw bytes encoded by the barcode, if applicable, otherwise {@code null}
      * @see Result#getRawBytes()
      */
-    public byte[] getRawBytes() {
+    public byte[] getRawBytes()
+    {
         return mResult.getRawBytes();
     }
 
@@ -123,7 +129,8 @@ public class BarcodeResult {
      * specific to the type of barcode that was decoded.
      * @see Result#getResultPoints()
      */
-    public ResultPoint[] getResultPoints() {
+    public ResultPoint[] getResultPoints()
+    {
         return mResult.getResultPoints();
     }
 
@@ -131,7 +138,8 @@ public class BarcodeResult {
      * @return {@link BarcodeFormat} representing the format of the barcode that was decoded
      * @see Result#getBarcodeFormat()
      */
-    public BarcodeFormat getBarcodeFormat() {
+    public BarcodeFormat getBarcodeFormat()
+    {
         return mResult.getBarcodeFormat();
     }
 
@@ -141,16 +149,19 @@ public class BarcodeResult {
      * like orientation.
      * @see Result#getResultMetadata()
      */
-    public Map<ResultMetadataType, Object> getResultMetadata() {
+    public Map<ResultMetadataType, Object> getResultMetadata()
+    {
         return mResult.getResultMetadata();
     }
 
-    public long getTimestamp() {
+    public long getTimestamp()
+    {
         return mResult.getTimestamp();
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return mResult.getText();
     }
 }

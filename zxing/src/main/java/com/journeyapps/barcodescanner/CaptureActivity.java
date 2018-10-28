@@ -2,18 +2,21 @@ package com.journeyapps.barcodescanner;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.KeyEvent;
+
+import androidx.annotation.NonNull;
 
 /**
  *
  */
-public class CaptureActivity extends Activity {
+public class CaptureActivity extends Activity
+{
     private CaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         barcodeScannerView = initializeContent();
@@ -28,42 +31,49 @@ public class CaptureActivity extends Activity {
      *
      * @return the DecoratedBarcodeView
      */
-    protected DecoratedBarcodeView initializeContent() {
+    protected DecoratedBarcodeView initializeContent()
+    {
         setContentView(R.layout.zxing_capture);
-        return (DecoratedBarcodeView)findViewById(R.id.zxing_barcode_scanner);
+        return (DecoratedBarcodeView) findViewById(R.id.zxing_barcode_scanner);
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
         capture.onResume();
     }
 
     @Override
-    protected void onPause() {
+    protected void onPause()
+    {
         super.onPause();
         capture.onPause();
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
         super.onDestroy();
         capture.onDestroy();
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState)
+    {
         super.onSaveInstanceState(outState);
         capture.onSaveInstanceState(outState);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
+    {
         capture.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
         return barcodeScannerView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
 }

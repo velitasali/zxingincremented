@@ -12,21 +12,24 @@ import java.util.Map;
 
 /**
  * Helper class for encoding barcodes as a Bitmap.
- *
+ * <p>
  * Adapted from QRCodeEncoder, from the zxing project:
  * https://github.com/zxing/zxing
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0.
  */
-public class BarcodeEncoder {
+public class BarcodeEncoder
+{
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
 
 
-    public BarcodeEncoder() {
+    public BarcodeEncoder()
+    {
     }
 
-    public Bitmap createBitmap(BitMatrix matrix) {
+    public Bitmap createBitmap(BitMatrix matrix)
+    {
         int width = matrix.getWidth();
         int height = matrix.getHeight();
         int[] pixels = new int[width * height];
@@ -42,7 +45,8 @@ public class BarcodeEncoder {
         return bitmap;
     }
 
-    public BitMatrix encode(String contents, BarcodeFormat format, int width, int height) throws WriterException {
+    public BitMatrix encode(String contents, BarcodeFormat format, int width, int height) throws WriterException
+    {
         try {
             return new MultiFormatWriter().encode(contents, format, width, height);
         } catch (WriterException e) {
@@ -53,7 +57,8 @@ public class BarcodeEncoder {
         }
     }
 
-    public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints) throws WriterException {
+    public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints) throws WriterException
+    {
         try {
             return new MultiFormatWriter().encode(contents, format, width, height, hints);
         } catch (WriterException e) {
@@ -63,11 +68,13 @@ public class BarcodeEncoder {
         }
     }
 
-    public Bitmap encodeBitmap(String contents, BarcodeFormat format, int width, int height) throws WriterException {
+    public Bitmap encodeBitmap(String contents, BarcodeFormat format, int width, int height) throws WriterException
+    {
         return createBitmap(encode(contents, format, width, height));
     }
 
-    public Bitmap encodeBitmap(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints) throws WriterException {
+    public Bitmap encodeBitmap(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints) throws WriterException
+    {
         return createBitmap(encode(contents, format, width, height, hints));
     }
 }

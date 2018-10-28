@@ -1,15 +1,17 @@
 package com.journeyapps.barcodescanner;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  *
  */
-public class Size implements Comparable<Size> {
+public class Size implements Comparable<Size>
+{
     public final int width;
     public final int height;
 
-    public Size(int width, int height) {
+    public Size(int width, int height)
+    {
         this.width = width;
         this.height = height;
     }
@@ -19,7 +21,8 @@ public class Size implements Comparable<Size> {
      *
      * @return a new Size with swapped width and height
      */
-    public Size rotate() {
+    public Size rotate()
+    {
         //noinspection SuspiciousNameCombination
         return new Size(height, width);
     }
@@ -31,7 +34,8 @@ public class Size implements Comparable<Size> {
      * @param d denominator
      * @return the scaled size
      */
-    public Size scale(int n, int d) {
+    public Size scale(int n, int d)
+    {
         return new Size(width * n / d, height * n / d);
     }
 
@@ -42,8 +46,9 @@ public class Size implements Comparable<Size> {
      * @param into the parent to fit into
      * @return the scaled size
      */
-    public Size scaleFit(Size into) {
-        if(width * into.height >= into.width * height) {
+    public Size scaleFit(Size into)
+    {
+        if (width * into.height >= into.width * height) {
             // match width
             return new Size(into.width, height * into.width / width);
         } else {
@@ -51,6 +56,7 @@ public class Size implements Comparable<Size> {
             return new Size(width * into.height / height, into.height);
         }
     }
+
     /**
      * Scales the size so that both dimensions will be greater than or equal to the corresponding
      * dimension of the parent. One of width or height will fit exactly. Aspect ratio is preserved.
@@ -58,8 +64,9 @@ public class Size implements Comparable<Size> {
      * @param into the parent to fit into
      * @return the scaled size
      */
-    public Size scaleCrop(Size into) {
-        if(width * into.height <= into.width * height) {
+    public Size scaleCrop(Size into)
+    {
+        if (width * into.height <= into.width * height) {
             // match width
             return new Size(into.width, height * into.width / width);
         } else {
@@ -74,7 +81,8 @@ public class Size implements Comparable<Size> {
      * @param other the size to compare with
      * @return true if this size fits into the other size
      */
-    public boolean fitsIn(Size other) {
+    public boolean fitsIn(Size other)
+    {
         return width <= other.width && height <= other.height;
     }
 
@@ -82,7 +90,8 @@ public class Size implements Comparable<Size> {
      * Default sort order is ascending by size.
      */
     @Override
-    public int compareTo(@NonNull Size other) {
+    public int compareTo(@NonNull Size other)
+    {
         int aPixels = this.height * this.width;
         int bPixels = other.height * other.width;
         if (bPixels < aPixels) {
@@ -94,12 +103,14 @@ public class Size implements Comparable<Size> {
         return 0;
     }
 
-    public String toString() {
+    public String toString()
+    {
         return width + "x" + height;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -109,7 +120,8 @@ public class Size implements Comparable<Size> {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int result = width;
         result = 31 * result + height;
         return result;

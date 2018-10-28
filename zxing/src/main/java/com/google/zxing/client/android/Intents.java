@@ -22,11 +22,14 @@ package com.google.zxing.client.android;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class Intents {
-    private Intents() {
+public final class Intents
+{
+    private Intents()
+    {
     }
 
-    public static final class Scan {
+    public static final class Scan
+    {
         /**
          * Send this intent to open the Barcodes app in scanning mode, find a barcode, and return
          * the results.
@@ -37,7 +40,7 @@ public final class Intents {
          * By default, sending this will decode all barcodes that we understand. However it
          * may be useful to limit scanning to certain formats. Use
          * {@link android.content.Intent#putExtra(String, String)} with one of the values below.
-         *
+         * <p>
          * Setting this is effectively shorthand for setting explicit formats with {@link #FORMATS}.
          * It is overridden by that setting.
          */
@@ -200,7 +203,8 @@ public final class Intents {
          */
         public static final int MIXED_SCAN = 2;
 
-        private Scan() {
+        private Scan()
+        {
         }
     }
 }

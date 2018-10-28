@@ -19,19 +19,21 @@ package com.google.zxing.client.android.camera.open;
 import android.hardware.Camera;
 import android.util.Log;
 
-public final class OpenCameraInterface {
-
-    private static final String TAG = OpenCameraInterface.class.getName();
-
-    private OpenCameraInterface() {
-    }
+public final class OpenCameraInterface
+{
 
     /**
      * For {@link #open(int)}, means no preference for which camera to open.
      */
     public static final int NO_REQUESTED_CAMERA = -1;
+    private static final String TAG = OpenCameraInterface.class.getName();
 
-    public static int getCameraId(int requestedId) {
+    private OpenCameraInterface()
+    {
+    }
+
+    public static int getCameraId(int requestedId)
+    {
         int numCameras = Camera.getNumberOfCameras();
         if (numCameras == 0) {
             Log.w(TAG, "No cameras!");
@@ -75,7 +77,8 @@ public final class OpenCameraInterface {
      *                    or {@link #NO_REQUESTED_CAMERA} means "no preference"
      * @return handle to {@link Camera} that was opened
      */
-    public static Camera open(int requestedId) {
+    public static Camera open(int requestedId)
+    {
         int cameraId = getCameraId(requestedId);
         if (cameraId == -1) {
             return null;

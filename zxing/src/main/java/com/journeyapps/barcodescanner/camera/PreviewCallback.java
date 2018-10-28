@@ -5,7 +5,9 @@ import com.journeyapps.barcodescanner.SourceData;
 /**
  * Callback for camera previews.
  */
-public interface PreviewCallback {
+public interface PreviewCallback
+{
     void onPreview(SourceData sourceData);
+
     void onPreviewError(Exception e);
 }

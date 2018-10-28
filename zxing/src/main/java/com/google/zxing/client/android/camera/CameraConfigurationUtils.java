@@ -36,7 +36,8 @@ import java.util.regex.Pattern;
  *
  * @author Sean Owen
  */
-public final class CameraConfigurationUtils {
+public final class CameraConfigurationUtils
+{
 
     private static final String TAG = "CameraConfiguration";
 
@@ -48,34 +49,36 @@ public final class CameraConfigurationUtils {
     private static final int MAX_FPS = 20;
     private static final int AREA_PER_1000 = 400;
 
-    private CameraConfigurationUtils() {
+    private CameraConfigurationUtils()
+    {
     }
 
     public static void setFocus(Camera.Parameters parameters,
-								CameraSettings.FocusMode focusModeSetting,
-                                boolean safeMode) {
+                                CameraSettings.FocusMode focusModeSetting,
+                                boolean safeMode)
+    {
         List<String> supportedFocusModes = parameters.getSupportedFocusModes();
         String focusMode = null;
 
-		if (safeMode || focusModeSetting == CameraSettings.FocusMode.AUTO) {
-			focusMode = findSettableValue("focus mode",
-					supportedFocusModes,
-					Camera.Parameters.FOCUS_MODE_AUTO);
-		} else if (focusModeSetting == CameraSettings.FocusMode.CONTINUOUS) {
-			focusMode = findSettableValue("focus mode",
-					supportedFocusModes,
-					Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE,
-					Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO,
-					Camera.Parameters.FOCUS_MODE_AUTO);
-		} else if (focusModeSetting == CameraSettings.FocusMode.INFINITY) {
-			focusMode = findSettableValue("focus mode",
-					supportedFocusModes,
-					Camera.Parameters.FOCUS_MODE_INFINITY);
-		} else if (focusModeSetting == CameraSettings.FocusMode.MACRO) {
-			focusMode = findSettableValue("focus mode",
-					supportedFocusModes,
-					Camera.Parameters.FOCUS_MODE_MACRO);
-		}
+        if (safeMode || focusModeSetting == CameraSettings.FocusMode.AUTO) {
+            focusMode = findSettableValue("focus mode",
+                    supportedFocusModes,
+                    Camera.Parameters.FOCUS_MODE_AUTO);
+        } else if (focusModeSetting == CameraSettings.FocusMode.CONTINUOUS) {
+            focusMode = findSettableValue("focus mode",
+                    supportedFocusModes,
+                    Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE,
+                    Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO,
+                    Camera.Parameters.FOCUS_MODE_AUTO);
+        } else if (focusModeSetting == CameraSettings.FocusMode.INFINITY) {
+            focusMode = findSettableValue("focus mode",
+                    supportedFocusModes,
+                    Camera.Parameters.FOCUS_MODE_INFINITY);
+        } else if (focusModeSetting == CameraSettings.FocusMode.MACRO) {
+            focusMode = findSettableValue("focus mode",
+                    supportedFocusModes,
+                    Camera.Parameters.FOCUS_MODE_MACRO);
+        }
 
         // Maybe selected auto-focus but not available, so fall through here:
         if (!safeMode && focusMode == null) {
@@ -93,7 +96,8 @@ public final class CameraConfigurationUtils {
         }
     }
 
-    public static void setTorch(Camera.Parameters parameters, boolean on) {
+    public static void setTorch(Camera.Parameters parameters, boolean on)
+    {
         List<String> supportedFlashModes = parameters.getSupportedFlashModes();
         String flashMode;
         if (on) {
@@ -116,7 +120,8 @@ public final class CameraConfigurationUtils {
         }
     }
 
-    public static void setBestExposure(Camera.Parameters parameters, boolean lightOn) {
+    public static void setBestExposure(Camera.Parameters parameters, boolean lightOn)
+    {
         int minExposure = parameters.getMinExposureCompensation();
         int maxExposure = parameters.getMaxExposureCompensation();
         float step = parameters.getExposureCompensationStep();
@@ -138,11 +143,13 @@ public final class CameraConfigurationUtils {
         }
     }
 
-    public static void setBestPreviewFPS(Camera.Parameters parameters) {
+    public static void setBestPreviewFPS(Camera.Parameters parameters)
+    {
         setBestPreviewFPS(parameters, MIN_FPS, MAX_FPS);
     }
 
-    public static void setBestPreviewFPS(Camera.Parameters parameters, int minFPS, int maxFPS) {
+    public static void setBestPreviewFPS(Camera.Parameters parameters, int minFPS, int maxFPS)
+    {
         List<int[]> supportedPreviewFpsRanges = parameters.getSupportedPreviewFpsRange();
         Log.i(TAG, "Supported FPS ranges: " + toString(supportedPreviewFpsRanges));
         if (supportedPreviewFpsRanges != null && !supportedPreviewFpsRanges.isEmpty()) {
@@ -172,7 +179,8 @@ public final class CameraConfigurationUtils {
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-    public static void setFocusArea(Camera.Parameters parameters) {
+    public static void setFocusArea(Camera.Parameters parameters)
+    {
         if (parameters.getMaxNumFocusAreas() > 0) {
             Log.i(TAG, "Old focus areas: " + toString(parameters.getFocusAreas()));
             List<Camera.Area> middleArea = buildMiddleArea(AREA_PER_1000);
@@ -184,7 +192,8 @@ public final class CameraConfigurationUtils {
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-    public static void setMetering(Camera.Parameters parameters) {
+    public static void setMetering(Camera.Parameters parameters)
+    {
         if (parameters.getMaxNumMeteringAreas() > 0) {
             Log.i(TAG, "Old metering areas: " + parameters.getMeteringAreas());
             List<Camera.Area> middleArea = buildMiddleArea(AREA_PER_1000);
@@ -196,13 +205,15 @@ public final class CameraConfigurationUtils {
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-    private static List<Camera.Area> buildMiddleArea(int areaPer1000) {
+    private static List<Camera.Area> buildMiddleArea(int areaPer1000)
+    {
         return Collections.singletonList(
                 new Camera.Area(new Rect(-areaPer1000, -areaPer1000, areaPer1000, areaPer1000), 1));
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-    public static void setVideoStabilization(Camera.Parameters parameters) {
+    public static void setVideoStabilization(Camera.Parameters parameters)
+    {
         if (parameters.isVideoStabilizationSupported()) {
             if (parameters.getVideoStabilization()) {
                 Log.i(TAG, "Video stabilization already enabled");
@@ -215,7 +226,8 @@ public final class CameraConfigurationUtils {
         }
     }
 
-    public static void setBarcodeSceneMode(Camera.Parameters parameters) {
+    public static void setBarcodeSceneMode(Camera.Parameters parameters)
+    {
         if (Camera.Parameters.SCENE_MODE_BARCODE.equals(parameters.getSceneMode())) {
             Log.i(TAG, "Barcode scene mode already set");
             return;
@@ -228,7 +240,8 @@ public final class CameraConfigurationUtils {
         }
     }
 
-    public static void setZoom(Camera.Parameters parameters, double targetZoomRatio) {
+    public static void setZoom(Camera.Parameters parameters, double targetZoomRatio)
+    {
         if (parameters.isZoomSupported()) {
             Integer zoom = indexOfClosestZoom(parameters, targetZoomRatio);
             if (zoom == null) {
@@ -245,7 +258,8 @@ public final class CameraConfigurationUtils {
         }
     }
 
-    private static Integer indexOfClosestZoom(Camera.Parameters parameters, double targetZoomRatio) {
+    private static Integer indexOfClosestZoom(Camera.Parameters parameters, double targetZoomRatio)
+    {
         List<Integer> ratios = parameters.getZoomRatios();
         Log.i(TAG, "Zoom ratios: " + ratios);
         int maxZoom = parameters.getMaxZoom();
@@ -267,7 +281,8 @@ public final class CameraConfigurationUtils {
         return closestIndex;
     }
 
-    public static void setInvertColor(Camera.Parameters parameters) {
+    public static void setInvertColor(Camera.Parameters parameters)
+    {
         if (Camera.Parameters.EFFECT_NEGATIVE.equals(parameters.getColorEffect())) {
             Log.i(TAG, "Negative effect already set");
             return;
@@ -282,7 +297,8 @@ public final class CameraConfigurationUtils {
 
     private static String findSettableValue(String name,
                                             Collection<String> supportedValues,
-                                            String... desiredValues) {
+                                            String... desiredValues)
+    {
         Log.i(TAG, "Requesting " + name + " value from among: " + Arrays.toString(desiredValues));
         Log.i(TAG, "Supported " + name + " values: " + supportedValues);
         if (supportedValues != null) {
@@ -297,7 +313,8 @@ public final class CameraConfigurationUtils {
         return null;
     }
 
-    private static String toString(Collection<int[]> arrays) {
+    private static String toString(Collection<int[]> arrays)
+    {
         if (arrays == null || arrays.isEmpty()) {
             return "[]";
         }
@@ -315,7 +332,8 @@ public final class CameraConfigurationUtils {
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-    private static String toString(Iterable<Camera.Area> areas) {
+    private static String toString(Iterable<Camera.Area> areas)
+    {
         if (areas == null) {
             return null;
         }
@@ -326,11 +344,13 @@ public final class CameraConfigurationUtils {
         return result.toString();
     }
 
-    public static String collectStats(Camera.Parameters parameters) {
+    public static String collectStats(Camera.Parameters parameters)
+    {
         return collectStats(parameters.flatten());
     }
 
-    public static String collectStats(CharSequence flattenedParams) {
+    public static String collectStats(CharSequence flattenedParams)
+    {
         StringBuilder result = new StringBuilder(1000);
 
         result.append("BOARD=").append(Build.BOARD).append('\n');

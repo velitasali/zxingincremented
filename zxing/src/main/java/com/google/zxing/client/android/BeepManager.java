@@ -32,7 +32,8 @@ import java.io.IOException;
 /**
  * Manages beeps and vibrations.
  */
-public final class BeepManager {
+public final class BeepManager
+{
 
     private static final String TAG = BeepManager.class.getSimpleName();
 
@@ -44,29 +45,33 @@ public final class BeepManager {
     private boolean beepEnabled = true;
     private boolean vibrateEnabled = false;
 
-    public BeepManager(Activity activity) {
+    public BeepManager(Activity activity)
+    {
         activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         // We do not keep a reference to the Activity itself, to prevent leaks
         this.context = activity.getApplicationContext();
     }
 
-    public boolean isBeepEnabled() {
+    public boolean isBeepEnabled()
+    {
         return beepEnabled;
     }
 
     /**
      * Call updatePrefs() after setting this.
-     *
+     * <p>
      * If the device is in silent mode, it will not beep.
      *
      * @param beepEnabled true to enable beep
      */
-    public void setBeepEnabled(boolean beepEnabled) {
+    public void setBeepEnabled(boolean beepEnabled)
+    {
         this.beepEnabled = beepEnabled;
     }
 
-    public boolean isVibrateEnabled() {
+    public boolean isVibrateEnabled()
+    {
         return vibrateEnabled;
     }
 
@@ -75,12 +80,14 @@ public final class BeepManager {
      *
      * @param vibrateEnabled true to enable vibrate
      */
-    public void setVibrateEnabled(boolean vibrateEnabled) {
+    public void setVibrateEnabled(boolean vibrateEnabled)
+    {
         this.vibrateEnabled = vibrateEnabled;
     }
 
     @SuppressLint("MissingPermission")
-    public synchronized void playBeepSoundAndVibrate() {
+    public synchronized void playBeepSoundAndVibrate()
+    {
         if (beepEnabled) {
             playBeepSound();
         }
@@ -93,19 +100,24 @@ public final class BeepManager {
     }
 
 
-    public MediaPlayer playBeepSound() {
+    public MediaPlayer playBeepSound()
+    {
         MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener()
+        {
             @Override
-            public void onCompletion(MediaPlayer mp) {
+            public void onCompletion(MediaPlayer mp)
+            {
                 mp.stop();
                 mp.release();
             }
         });
-        mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+        mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener()
+        {
             @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
+            public boolean onError(MediaPlayer mp, int what, int extra)
+            {
                 Log.w(TAG, "Failed to beep " + what + ", " + extra);
                 // possibly media player error, so release and recreate
                 mp.stop();
