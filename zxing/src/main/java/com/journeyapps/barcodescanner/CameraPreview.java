@@ -862,6 +862,9 @@ public class CameraPreview extends ViewGroup
         if (intersection.height() > intersection.width()) {
             // We don't want a frame that is taller than wide.
             intersection.inset(0, (intersection.height() - intersection.width()) / 2);
+        } else if (intersection.width() > intersection.height()) {
+            // We don't also want a frame that is wider than tall
+            intersection.inset((intersection.width() - intersection.height()) / 2, 0);
         }
         return intersection;
     }
