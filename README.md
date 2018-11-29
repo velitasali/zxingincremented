@@ -6,5 +6,5 @@
 
 # To implement (JCenter)
 ```xml
-implementation 'com.velitasali.tools.android:zxing:3.6.2'
+implementation 'com.velitasali.tools.android:zxing:3.6.3'
 ```
